@@ -22,4 +22,4 @@ jobs:
       - name: Install dependencies and build
         run: yarn
       - name: Publish to NPM
-        run: yarn publish --non-interactive
+        run: npm publish
