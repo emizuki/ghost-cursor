@@ -4,18 +4,22 @@ on:
   push:
     tags:
       - 'v*' # only run if new tag is pushed
+
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Install Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 24
+          registry-url: 'https://registry.npmjs.org'
       - name: Install dependencies and build
         run: yarn
-      - uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          strategy: all # will publish any version that does not yet exist in the registry
+      - name: Publish to NPM
+        run: yarn publish --non-interactive
